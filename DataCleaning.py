@@ -15,7 +15,7 @@ columns = ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_byt
     'dst_host_rerror_rate', 'dst_host_srv_rerror_rate',
     'label', 'difficulty_level']
 
-df = pd.read_csv('Datasets/KddTrain+.txt', names = columns)
+df = pd.read_csv('./KDDTrain+.txt', names = columns)
 
 # Check for and drop null values
 print(df.isnull().sum())
@@ -42,14 +42,16 @@ X_scaled = scaler.fit_transform(X)
 # Convert back to DataFrame
 X = pd.DataFrame(X_scaled, columns=X.columns)
 
-# Convert label column to binary classification
-y = y.apply(lambda x: 'normal' if x == 'normal' else 'attack')
+# Convert label column to multiclass classification
 label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(y)  # normal = 0, attack = 1
 
-# Create a cleaned DataFrame with the processed features and labels
+# Create a cleaned DataFrame with the processed features and multiclass labels
 df_cleaned = X.copy()
 df_cleaned['label'] = y_encoded
 
 # Save the cleaned DataFrame to a new CSV file
 df_cleaned.to_csv("cleanedBinary_KddTrain+.csv", index=False)
+
+label_mapping = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
+print("Label Mapping:", label_mapping)
