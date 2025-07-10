@@ -51,7 +51,7 @@ df_cleaned = X.copy()
 df_cleaned['label'] = y_encoded
 
 # Save the cleaned DataFrame to a new CSV file
-df_cleaned.to_csv("cleanedBinary_KddTrain+.csv", index=False)
+df_cleaned.to_csv("cleanedMulticlass_KddTrain+.csv", index=False)
 
 label_mapping = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
 print("Label Mapping:", label_mapping)
