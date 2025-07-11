@@ -8,7 +8,7 @@ from imblearn.pipeline import Pipeline
 
 # === Load preprocessed data with 5 labels ===
 train_df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")  # Chưa oversample
-test_df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")
+test_df = pd.read_csv("cleaned5Grouped_KddTest+.csv")
 
 # Tách đặc trưng và nhãn
 X_train = train_df.drop("label", axis=1)
