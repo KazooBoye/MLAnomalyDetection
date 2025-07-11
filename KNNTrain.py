@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 # Read training and testing datasets
-train_df = pd.read_csv('cleaned5Grouped_KddTrain+.csv')
+train_df = pd.read_csv('cleaned5Grouped_KddTrain+_SMOTE.csv')
 test_df = pd.read_csv('cleaned5Grouped_KddTest+.csv')
 
 # Seperate features and labels

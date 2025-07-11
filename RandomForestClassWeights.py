@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 # 1. Load datasets (đã được tiền xử lý và chuẩn hóa)
-train_df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")
+train_df = pd.read_csv("cleaned5Grouped_KddTrain+_SMOTE.csv")
 test_df = pd.read_csv("cleaned5Grouped_KddTest+.csv")
 
 # 2. Split features and labels
@@ -11,6 +11,13 @@ X_train = train_df.drop('label', axis=1)
 y_train = train_df['label']
 X_test = test_df.drop('label', axis=1)
 y_test = test_df['label']
+
+# Drop rows with NaN in y_test and corresponding rows in X_test
+nan_mask = y_test.isnull()
+if nan_mask.any():
+    print(f"Found and dropping {nan_mask.sum()} rows with NaN labels in test data.")
+    y_test = y_test.dropna()
+    X_test = X_test.loc[y_test.index]
 
 # 3. Ensure test set has same columns as training set
 train_columns = X_train.columns
