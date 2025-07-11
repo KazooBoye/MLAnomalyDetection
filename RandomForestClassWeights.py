@@ -3,8 +3,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 # 1. Load datasets (đã được tiền xử lý và chuẩn hóa)
-train_df = pd.read_csv("cleanedMulticlass_KddTrain+.csv")
-test_df = pd.read_csv("cleanedMulticlass_KddTest+.csv")
+train_df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")
+test_df = pd.read_csv("cleaned5Grouped_KddTest+.csv")
 
 # 2. Split features and labels
 X_train = train_df.drop('label', axis=1)
@@ -23,7 +23,7 @@ X_test = X_test[train_columns]
 rf = RandomForestClassifier(
     n_estimators=100,
     random_state=42,
-    class_weight='balanced'  # 🔥 Đây là phần quan trọng
+    class_weight='balanced' 
 )
 rf.fit(X_train, y_train)
 

@@ -26,11 +26,11 @@ min_class_size = min(label_counts.values())
 
 if min_class_size >= 2:
     safe_k = max(1, min(min_class_size - 1, 5))
-    print(f"✔️ Sử dụng SMOTE với k_neighbors = {safe_k} (Lớp nhỏ nhất có {min_class_size} mẫu)")
+    print(f"Using SMOTE with k = {safe_k} (Smallest class has {min_class_size} records)")
     sm = SMOTE(random_state=42, k_neighbors=safe_k)
     X_train_res, y_train_res = sm.fit_resample(X_train, y_train)
 else:
-    print(f"⚠️ Có lớp chỉ có 1 mẫu. Dùng RandomOverSampler thay vì SMOTE")
+    print(f"Class only has one record, using RandomOverSampler in substitute for SMOTE")
     ros = RandomOverSampler(random_state=42)
     X_train_res, y_train_res = ros.fit_resample(X_train, y_train)
 
