@@ -1,4 +1,4 @@
-# Anomaly Detection on NSL-KDD (KDD'99 variant) Dataset
+# Anomaly Detection on NSL-KDD Dataset
 
 This project focuses on building and evaluating various machine learning models for network intrusion detection using the NSL-KDD dataset. The primary goal is to classify network traffic into "Normal" or one of four major attack categories: Denial of Service (DoS), Probe, Remote to Local (R2L), and User to Root (U2R).
 
@@ -11,17 +11,18 @@ The project involves several key stages:
     *   K-Nearest Neighbors (KNN)
     *   Random Forest (with class weighting and with SMOTE)
     *   A Hierarchical XGBoost model
+    *   Deep Autoencoder for anomaly detection
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.x
-- Required libraries: pandas, scikit-learn, imbalanced-learn, xgboost.
+- Required libraries: pandas, scikit-learn, imbalanced-learn, xgboost, tensorflow, matplotlib.
 
 You can install the necessary packages using pip:
 ```bash
-pip install pandas scikit-learn imbalanced-learn xgboost
+pip install pandas scikit-learn imbalanced-learn xgboost tensorflow matplotlib
 ```
 
 ### How to Run
@@ -73,6 +74,12 @@ python RandomForestClassWeights.py
 python Hierarchical_XGBoost.py
 ```
 
+**Deep Autoencoder**
+*This model trains on the "Normal" data from `cleaned5Grouped_KddTrain+.csv` to learn a representation of normal traffic and then identifies anomalies.*
+```bash
+python AutoencoderTrain.py
+```
+
 ## File Descriptions
 
 - `KDDTrain+.txt`, `KDDTest+.txt`: The raw dataset files.
@@ -83,5 +90,7 @@ python Hierarchical_XGBoost.py
 - `RandomForestClassWeights.py`: Trains and evaluates a Random Forest model using balanced class weights.
 - `RandomForestSMOTETrain.py`: An alternative Random Forest implementation that uses SMOTE on the full multiclass dataset.
 - `Hierarchical_XGBoost.py`: Implements a two-stage XGBoost classifier to first distinguish normal vs. attack, then classify the specific attack type.
+- `AutoencoderTrain.py`: Implements a deep autoencoder for binary (Normal vs. Attack) anomaly detection. It finds an optimal detection threshold using the ROC curve.
+- `legacyAutoencoderTrain.py`: An older, simpler Keras-based autoencoder implementation.
 - `*.csv`: Various data files generated during the preprocessing and balancing steps.
 - `check.py`: A utility script to check for null values in the data.
