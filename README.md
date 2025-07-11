@@ -1,6 +1,6 @@
-# Anomaly Detection on KDD'99 Dataset
+# Anomaly Detection on NSL-KDD (KDD'99 variant) Dataset
 
-This project focuses on building and evaluating various machine learning models for network intrusion detection using the KDD Cup '99 dataset. The primary goal is to classify network traffic into "Normal" or one of four major attack categories: Denial of Service (DoS), Probe, Remote to Local (R2L), and User to Root (U2R).
+This project focuses on building and evaluating various machine learning models for network intrusion detection using the NSL-KDD dataset. The primary goal is to classify network traffic into "Normal" or one of four major attack categories: Denial of Service (DoS), Probe, Remote to Local (R2L), and User to Root (U2R).
 
 ## Project Overview
 
