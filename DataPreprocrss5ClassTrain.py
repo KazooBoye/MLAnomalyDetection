@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
-# Tên cột
+# Column names
 columns = ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes',
     'land', 'wrong_fragment', 'urgent', 'hot', 'num_failed_logins', 'logged_in',
     'num_compromised', 'root_shell', 'su_attempted', 'num_root', 'num_file_creations',
@@ -16,18 +16,18 @@ columns = ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_byt
     'dst_host_rerror_rate', 'dst_host_srv_rerror_rate',
     'label', 'difficulty_level']
 
-# Đọc dữ liệu
+# Read data
 df = pd.read_csv('./KDDTrain+.txt', names=columns)
 
-# Tiền xử lý cơ bản
+# Basic preprocessing
 df.dropna(inplace=True)
 df.drop_duplicates(inplace=True)
 df = df[df['duration'] >= 0]
 
-# One-hot encoding cho 3 cột phân loại
+# One-hot encoding for 3 categorical columns
 df = pd.get_dummies(df, columns=['protocol_type', 'service', 'flag'])
 
-# Gộp nhãn tấn công về 5 nhóm
+# Group attack labels into 5 categories
 label_map = {
     'back': 'DoS', 'land': 'DoS', 'neptune': 'DoS', 'pod': 'DoS', 'smurf': 'DoS', 'teardrop': 'DoS',
     'ipsweep': 'Probe', 'nmap': 'Probe', 'portsweep': 'Probe', 'satan': 'Probe',
@@ -39,10 +39,10 @@ label_map = {
 
 df['label'] = df['label'].map(label_map)
 
-# Loại bỏ các hàng có nhãn không thuộc 5 nhóm (nếu có)
+# Remove rows with labels not in the 5 groups (if any)
 df = df[df['label'].notnull()]
 
-# Chuẩn hóa
+# Normalization
 X = df.drop(['label', 'difficulty_level'], axis=1)
 y = df['label']
 
@@ -50,14 +50,14 @@ scaler = MinMaxScaler()
 X_scaled = scaler.fit_transform(X)
 X = pd.DataFrame(X_scaled, columns=X.columns)
 
-# Gán lại nhãn thành số từ 0–4
+# Assign numerical labels from 0-4
 label_groups = {'Normal': 0, 'DoS': 1, 'Probe': 2, 'R2L': 3, 'U2R': 4}
 y_encoded = y.map(label_groups)
 
-# Kết hợp và lưu
+# Combine and save
 df_cleaned = X.copy()
 df_cleaned['label'] = y_encoded
 df_cleaned.to_csv("cleaned5Grouped_KddTrain+.csv", index=False)
 
-print("Xử lý hoàn tất. Nhóm nhãn: ")
+print("Processing complete. Label groups: ")
 print(label_groups)

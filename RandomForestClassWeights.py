@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
-# 1. Load datasets (đã được tiền xử lý và chuẩn hóa)
+# 1. Load datasets (preprocessed and standardized)
 train_df = pd.read_csv("cleaned5Grouped_KddTrain+_SMOTE.csv")
 test_df = pd.read_csv("cleaned5Grouped_KddTest+.csv")
 

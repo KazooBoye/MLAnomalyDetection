@@ -8,8 +8,8 @@ from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 
-# === Load & chuẩn bị dữ liệu ===
-df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")  # chứa 5 nhóm nhãn
+# === Load & prepare data ===
+df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")
 
 # Binary labels: Normal = 0, Attack = 1
 df['binary_label'] = df['label'].apply(lambda x: 0 if x == 0 else 1)
@@ -20,14 +20,14 @@ y = df['binary_label']
 scaler = MinMaxScaler()
 X_scaled = scaler.fit_transform(X)
 
-# Chỉ dùng Normal samples để train Autoencoder
+# Use only Normal samples to train the Autoencoder
 X_train = X_scaled[y == 0]
 
-# Giữ lại toàn bộ tập test
+# Keep the entire test set
 X_test = X_scaled
 y_test = y.values
 
-# === Xây dựng Autoencoder sâu ===
+# === Build a deep Autoencoder ===
 input_dim = X_train.shape[1]
 input_layer = Input(shape=(input_dim,))
 
@@ -58,25 +58,25 @@ history = autoencoder.fit(X_train, X_train,
                           verbose=1,
                           callbacks=[early_stop])
 
-# === Tính lỗi tái tạo (reconstruction error) ===
+# === Calculate reconstruction error ===
 X_test_pred = autoencoder.predict(X_test)
 mse = np.mean(np.power(X_test - X_test_pred, 2), axis=1)
 
-# === Tìm ngưỡng tối ưu dựa trên ROC ===
+# === Find the optimal threshold based on ROC ===
 fpr, tpr, thresholds = roc_curve(y_test, mse)
 optimal_idx = np.argmax(tpr - fpr)
 optimal_threshold = thresholds[optimal_idx]
 print(f"\nOptimal Threshold = {optimal_threshold:.6f}")
 
-# === Phân loại dựa trên ngưỡng ===
+# === Classify based on the threshold ===
 y_pred = (mse > optimal_threshold).astype(int)
 
-# === Đánh giá ===
+# === Evaluation ===
 print("\n=== Autoencoder Binary Classification Report ===")
 print(classification_report(y_test, y_pred))
 print("AUC Score:", roc_auc_score(y_test, mse))
 
-# === (Tuỳ chọn) Vẽ ROC Curve ===
+# === (Optional) Plot ROC Curve ===
 plt.figure(figsize=(6, 5))
 plt.plot(fpr, tpr, label=f"AUC = {roc_auc_score(y_test, mse):.4f}")
 plt.plot([0, 1], [0, 1], 'k--')

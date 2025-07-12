@@ -4,23 +4,23 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from collections import Counter
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 
-# 1. Load preprocessed datasets (đã chuẩn hóa từ trước)
+# 1. Load preprocessed datasets (already standardized)
 train_df = pd.read_csv("cleanedMulticlass_KddTrain+.csv")
 test_df = pd.read_csv("cleanedMulticlass_KddTest+.csv")
 
-# 2. Tách nhãn và đặc trưng
+# 2. Separate labels and features
 X_train = train_df.drop('label', axis=1)
 y_train = train_df['label']
 X_test = test_df.drop('label', axis=1)
 y_test = test_df['label']
 
-# 3. Đảm bảo tập test có các cột giống tập train
+# 3. Ensure the test set has the same columns as the training set
 missing_cols = set(X_train.columns) - set(X_test.columns)
 for col in missing_cols:
     X_test[col] = 0
 X_test = X_test[X_train.columns]
 
-# 4. Áp dụng SMOTE (hoặc fallback) để cân bằng tập train
+# 4. Apply SMOTE (or fallback) to balance the training set
 label_counts = Counter(y_train)
 min_class_size = min(label_counts.values())
 
@@ -34,11 +34,11 @@ else:
     ros = RandomOverSampler(random_state=42)
     X_train_res, y_train_res = ros.fit_resample(X_train, y_train)
 
-# 5. Huấn luyện mô hình Random Forest
+# 5. Train the Random Forest model
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
 rf.fit(X_train_res, y_train_res)
 
-# 6. Dự đoán và đánh giá trên tập test
+# 6. Predict and evaluate on the test set
 y_pred = rf.predict(X_test)
 
 print("=== Accuracy ===")

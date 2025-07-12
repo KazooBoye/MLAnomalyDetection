@@ -33,7 +33,7 @@ categorical_cols = ['protocol_type', 'service', 'flag']
 # One-Hot Encoding
 df = pd.get_dummies(df, columns=categorical_cols)
 
-# Drop label column for norrmalization
+# Drop label column for normalization
 X = df.drop(['label', 'difficulty_level'], axis=1)
 y = df['label']
 # Normalization
@@ -44,7 +44,7 @@ X = pd.DataFrame(X_scaled, columns=X.columns)
 
 # Convert label column to multiclass classification
 label_encoder = LabelEncoder()
-y_encoded = label_encoder.fit_transform(y)  # normal = 0, attack = 1
+y_encoded = label_encoder.fit_transform(y)
 
 # Create a cleaned DataFrame with the processed features and multiclass labels
 df_cleaned = X.copy()
