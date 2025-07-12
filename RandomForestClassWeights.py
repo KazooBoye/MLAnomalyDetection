@@ -2,9 +2,9 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
-# 1. Load datasets (preprocessed and standardized)
-train_df = pd.read_csv("cleaned5Grouped_KddTrain+_SMOTE.csv")
-test_df = pd.read_csv("cleaned5Grouped_KddTest+.csv")
+# 1. Load datasets (preprocessed and normalized)
+train_df = pd.read_csv("cleanedBinary_KddTrain+.csv")
+test_df = pd.read_csv("cleanedBinary_KddTest+.csv")
 
 # 2. Split features and labels
 X_train = train_df.drop('label', axis=1)

@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 import matplotlib.pyplot as plt
 
 # Load preprocessed data
@@ -28,39 +28,41 @@ for col in missing_cols:
 X_test = X_test[train_columns]
 
 # === Find the optimal k ===
-print("Finding the optimal k value...")
+print("Finding optimal K for Attack (label = 1)...")
 
-accuracies = []
+f1_scores = []
 k_range = range(1, 50)
 for k in k_range:
+    print(f"Testing k = {k}")
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(X_train, y_train)
     y_pred_k = knn.predict(X_test)
-    acc = accuracy_score(y_test, y_pred_k)
-    accuracies.append(acc)
+    # Calculate F1-score for the attack class (label=1)
+    f1_attack = f1_score(y_test, y_pred_k, pos_label=1, zero_division=0)
+    f1_scores.append(f1_attack)
 
-# Select the optimal k
-optimal_k = k_range[accuracies.index(max(accuracies))]
-print(f"Optimal k value: {optimal_k} with accuracy: {max(accuracies):.4f}")
+# Find optimal k
+optimal_k = k_range[f1_scores.index(max(f1_scores))]
+print(f"\nOptimal k: {optimal_k} with F1-score (Attack class): {max(f1_scores):.4f}")
 
-# Visualize the results
+# Plot F1 by k
 plt.figure(figsize=(10, 6))
-plt.plot(k_range, accuracies, marker='o', linestyle='-')
-plt.title('Accuracy by Number of Neighbors (k)')
-plt.xlabel('Value of k')
-plt.ylabel('Accuracy')
+plt.plot(k_range, f1_scores, marker='o', linestyle='-')
+plt.title("F1-score of 'Attack' Class by k Value (SMOTE oversampling)")
+plt.xlabel('k Value')
+plt.ylabel('F1-score (label = 1)')
 plt.xticks(k_range)
 plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# === Train with optimal k ===
+# === Train final model with optimal k ===
 knn_final = KNeighborsClassifier(n_neighbors=optimal_k)
 knn_final.fit(X_train, y_train)
 y_pred = knn_final.predict(X_test)
 
 # Evaluation
-print("=== Classification Results with Optimal k ===")
+print("\n=== Classification Results with Optimal k ===")
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))

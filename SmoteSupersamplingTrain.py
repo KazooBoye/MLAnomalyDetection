@@ -3,7 +3,7 @@ from imblearn.over_sampling import SMOTE
 from collections import Counter
 
 # Load the preprocessed dataset with grouped labels
-df = pd.read_csv("cleaned5Grouped_KddTrain+.csv")
+df = pd.read_csv("cleanedBinary_KddTrain+.csv")
 
 # Separate features and label
 X = df.drop('label', axis=1)
@@ -31,5 +31,5 @@ print("\nDistribution after SMOTE:")
 print(Counter(y_resampled))
 
 # Save the result to a new file
-df_resampled.to_csv("cleaned5Grouped_KddTrain+_SMOTE.csv", index=False)
-print("\nSaved: cleaned5Grouped_KddTrain+_SMOTE.csv")
+df_resampled.to_csv("cleanedBinary_KddTrain+_SMOTE.csv", index=False)
+print("\nSaved: cleanedBinary_KddTrain+_SMOTE.csv")
