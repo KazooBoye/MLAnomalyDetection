@@ -58,6 +58,13 @@ history = autoencoder.fit(X_train, X_train,
                           verbose=1,
                           callbacks=[early_stop])
 
+# === Save the trained model and scaler for future use ===
+import pickle
+autoencoder.save("autoencoder_model.h5")
+with open("scaler.pkl", "wb") as f:
+    pickle.dump(scaler, f)
+print("Model saved as 'autoencoder_model.h5' and scaler saved as 'scaler.pkl'")
+
 # === Calculate reconstruction error ===
 X_test_pred = autoencoder.predict(X_test)
 mse = np.mean(np.power(X_test - X_test_pred, 2), axis=1)
